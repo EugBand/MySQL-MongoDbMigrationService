@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "38f14691-c705-491c-8c30-9ed258f8ca63",
+		"name": "STUDY_MONGO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14781276"
+	},
+	"item": [
+		{
+			"name": "POST_add_fakes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/fake?employees=20&tasks=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fake"
+					],
+					"query": [
+						{
+							"key": "employees",
+							"value": "20"
+						},
+						{
+							"key": "tasks",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_all_employees",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employees?dbType=MONGO",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employees"
+					],
+					"query": [
+						{
+							"key": "dbType",
+							"value": "MONGO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_all_tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/tasks?dbType=MONGO",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks"
+					],
+					"query": [
+						{
+							"key": "dbType",
+							"value": "MONGO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT_migrate_all",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/processes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"processes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT_search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/tasks/search?search=think&status=ACTIVE&order=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"search"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "think"
+						},
+						{
+							"key": "status",
+							"value": "ACTIVE"
+						},
+						{
+							"key": "order",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
