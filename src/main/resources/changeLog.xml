@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="Eugene">
+        <sql>
+            CREATE TABLE IF NOT EXISTS employeeEntities (
+            id VARCHAR(255) NOT NULL,
+            first_name VARCHAR(50) NOT NULL,
+            last_name VARCHAR(50) NOT NULL,
+            sex VARCHAR(255) NULL,
+            dob date NOT NULL,
+            position VARCHAR(255) NULL,
+            active BIT(1) NULL,
+            created datetime NULL,
+            modified datetime NULL,
+            CONSTRAINT pk_employees PRIMARY KEY (id)
+            );
+
+            ALTER TABLE employeeEntities ADD CONSTRAINT FK_EMPLOYEES_ON_ID FOREIGN KEY (id) REFERENCES addresses (user_id);
+        </sql>
+    </changeSet>
+    <changeSet id="2" author="Eugene">
+        <sql>
+            CREATE TABLE IF NOT EXISTS addresses (
+            user_id VARCHAR(255) NOT NULL,
+            country VARCHAR(255) NOT NULL,
+            city VARCHAR(255) NOT NULL,
+            post_code VARCHAR(10) NOT NULL,
+            addressEntity VARCHAR(255) NOT NULL,
+            CONSTRAINT pk_addresses PRIMARY KEY (user_id)
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="3" author="Eugene">
+        <sql>
+            CREATE TABLE IF NOT EXISTS contacts (
+            contact_id BIGINT NOT NULL,
+            contact_type VARCHAR(255) NOT NULL,
+            contactEntity VARCHAR(255) NOT NULL,
+            `description` VARCHAR(255) NULL,
+            id VARCHAR(255) NOT NULL,
+            CONSTRAINT pk_contacts PRIMARY KEY (contact_id)
+            );
+
+            ALTER TABLE contacts ADD CONSTRAINT FK_CONTACTS_ON_ID FOREIGN KEY (id) REFERENCES employeeEntities (id);
+        </sql>
+    </changeSet>
+    <changeSet id="4" author="Eugene">
+        <sql>
+            CREATE TABLE IF NOT EXISTS taskEntities (
+            id BIGINT AUTO_INCREMENT NOT NULL,
+            employee_id VARCHAR(255) NULL,
+            `description` VARCHAR(255) NOT NULL,
+            status VARCHAR(255) NOT NULL,
+            created datetime NULL,
+            modified datetime NULL,
+            CONSTRAINT pk_tasks PRIMARY KEY (id)
+            );
+
+            ALTER TABLE taskEntities ADD CONSTRAINT FK_TASKS_ON_EMPLOYEE FOREIGN KEY (employee_id) REFERENCES employeeEntities (id);
+        </sql>
+    </changeSet>
+    <changeSet id="5" author="Eugene">
+        <sql>
+            INSERT INTO roles(name) VALUES ('ADMIN');
+            INSERT INTO roles(name) VALUES ('USER');
+            INSERT INTO roles(name) VALUES ('GUEST');
+        </sql>
+    </changeSet>
+    <changeSet id="6" author="Eugene">
+        <sql>
+			DROP TYPE IF EXISTS user_status_type;
+            CREATE TYPE user_status_type AS enum('ACTIVE','BLOCKED');
+
+			DROP TABLE IF EXISTS public.statuses;
+            CREATE TABLE public.statuses
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+            name user_status_type,
+            CONSTRAINT statuses_pkey PRIMARY KEY (id)
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="7" author="Eugene">
+        <sql>
+            INSERT INTO statuses(name) VALUES ('ACTIVE');
+            INSERT INTO statuses(name) VALUES ('BLOCKED');
+        </sql>
+    </changeSet>
+    <changeSet id="8" author="Eugene">
+        <sql>
+            CREATE TABLE IF NOT EXISTS users
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+            first_name character varying(100),
+            last_name character varying(100),
+            username character varying(100) NOT NULL,
+            email character varying(100) NOT NULL,
+            password character varying(100) NOT NULL,
+            role_id bigint NOT NULL,
+            status_id bigint NOT NULL,
+            CONSTRAINT users_pkey PRIMARY KEY (id),
+            CONSTRAINT users_role_id_fk FOREIGN KEY (role_id)
+            REFERENCES public.roles (id) ON DELETE CASCADE,
+            CONSTRAINT users_status_id_fk FOREIGN KEY (status_id)
+            REFERENCES public.statuses (id) ON DELETE CASCADE
+            )
+        </sql>
+    </changeSet>
+    <changeSet id="9" author="Eugene">
+        <sql>
+            CREATE TABLE IF NOT EXISTS orders
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+            cost numeric(19,2),
+            create_date timestamp without time zone NOT NULL,
+            user_id bigint,
+            CONSTRAINT orders_pkey PRIMARY KEY (id),
+            CONSTRAINT orders_user_id_fk FOREIGN KEY (user_id)
+            REFERENCES public.users (id) ON DELETE CASCADE
+            )
+        </sql>
+    </changeSet>
+    <changeSet id="10" author="Eugene">
+        <sql>
+            CREATE TABLE IF NOT EXISTS order_items
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+            quantity int NOT NULL,
+            order_id bigint NOT NULL,
+            gift_id bigint NOT NULL,
+            CONSTRAINT order_items_pkey PRIMARY KEY (id),
+            CONSTRAINT order_items_order_id_fk FOREIGN KEY (order_id)
+            REFERENCES public.orders (id) ON DELETE CASCADE,
+            CONSTRAINT order_items_gift_id_fk FOREIGN KEY (gift_id)
+            REFERENCES public.gifts (id) ON DELETE CASCADE
+            )
+        </sql>
+    </changeSet>
+</databaseChangeLog>
