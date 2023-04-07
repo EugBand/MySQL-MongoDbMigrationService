@@ -2,6 +2,8 @@ package com.epam.mongoDBtask.model.document;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.epam.mongoDBtask.model.type.TaskStatusType;
@@ -24,6 +26,7 @@ public class TaskDocument {
 
     private Long employeeId;
 
+    @TextIndexed
     private String description;
 
     private TaskStatusType status;

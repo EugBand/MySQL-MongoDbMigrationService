@@ -3,6 +3,7 @@ package com.epam.mongoDBtask.service;
 import static com.epam.mongoDBtask.util.DbType.MONGO;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -63,5 +64,11 @@ public class TaskService {
         } catch (EntityNotFoundException e) {
             return Optional.empty();
         }
+    }
+
+    public List<TaskResponseDto> search(String search, String status, Long order) {
+        return taskMongoRepository.findTasksWithParams(search, status, order).stream()
+                .map(documentMapper::toTaskResponseDto)
+                .toList();
     }
 }
